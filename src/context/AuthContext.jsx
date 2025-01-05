@@ -1,48 +1,51 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-// Crear el contexto de autenticación
 export const AuthContext = createContext();
 
-// Crear el proveedor que contendrá el estado de autenticación
 export const AuthProvider = ({ children }) => {
-  // Estado de autenticación, token y rol
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null);  // Agregar el estado para el rol
+  const [role, setRole] = useState(null);
+  const [usuario, setUsuario] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
-  // Verifica si hay un token y rol en localStorage al cargar la aplicación
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
-    const storedRole = localStorage.getItem('authRole');  // Recuperar el rol
+    const storedRole = localStorage.getItem('authRole');
+    const storedUsuario = localStorage.getItem('usuario'); // Obtener usuario
 
-    if (storedToken && storedRole) {
-      setToken(storedToken);  // Si el token está en localStorage, lo cargamos
-      setRole(storedRole);    // Cargar el rol desde localStorage
-      setIsAuthenticated(true);  // Usuario está autenticado
+    if (storedToken && storedRole && storedUsuario) {
+      setToken(storedToken);
+      setRole(Number(storedRole)); // Convertir el rol a número
+      setUsuario(storedUsuario); // Establecer usuario
+      setIsAuthenticated(true);
     }
+    setIsLoading(false); // Finaliza la carga
   }, []);
 
-  // Función de login, recibe un token y un rol
-  const login = (newToken, newRole) => {
-    setToken(newToken);        // Guardamos el token en el estado
-    setRole(newRole);          // Guardamos el rol en el estado
-    localStorage.setItem('authToken', newToken);  // Guardamos el token en localStorage
-    localStorage.setItem('authRole', newRole);    // Guardamos el rol en localStorage
-    setIsAuthenticated(true);  // Marcamos al usuario como autenticado
+  const login = (newToken, newRole, newUser) => {
+    setToken(newToken);
+    setRole(newRole);
+    setUsuario(newUser);
+    localStorage.setItem('authToken', newToken);
+    localStorage.setItem('authRole', newRole);
+    localStorage.setItem('usuario', newUser);
+    setIsAuthenticated(true);
   };
 
-  // Función de logout
   const logout = () => {
-    setToken(null);            // Eliminamos el token del estado
-    setRole(null);             // Eliminamos el rol del estado
-    localStorage.removeItem('authToken');  // Eliminamos el token de localStorage
-    localStorage.removeItem('authRole');   // Eliminamos el rol de localStorage
-    setIsAuthenticated(false);  // Marcamos al usuario como no autenticado
+    setToken(null);
+    setRole(null);
+    setUsuario(null);
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('authRole');
+    localStorage.removeItem('usuario');
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, role, login, logout }}>
-      {children} {/* Envuelve los componentes hijos */}
+    <AuthContext.Provider value={{ isAuthenticated, token, role, usuario, login, logout, isLoading }}>
+      {children}
     </AuthContext.Provider>
   );
 };

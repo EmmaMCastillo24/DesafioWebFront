@@ -1,17 +1,22 @@
-import './App.css'
+import './App.css';
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; 
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; 
 import { AuthProvider, AuthContext } from './context/AuthContext';  
 import Login from './pages/Login';  
-import Home from './pages/Home'; 
+import Home from './pages/Home';  
+import NotFoundPage from './pages/NotFoundPage';  
 
-
+// Componente de ruta protegida
 const ProtectedRoute = ({ element }) => {
-  const { isAuthenticated } = useContext(AuthContext); // Verificamos si el usuario está autenticado
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />; // Si no está autenticado, redirige a la página de login
+  const { isAuthenticated, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return <div>Cargando...</div>; // O cualquier indicador de carga
   }
-  return element; // Si está autenticado, renderiza el componente
+
+  if (!isAuthenticated) return <Navigate to="/login" />; // Redirigir si no está autenticado
+
+  return element; // Renderiza el componente protegido
 };
 
 const App = () => {
@@ -22,8 +27,11 @@ const App = () => {
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />  {/* Ruta para login */}
 
-          {/* Rutas protegidas */}
-          <Route path="/home" element={<ProtectedRoute element={<Home />} />} />  {/* Ruta para home, protegida por autenticación */}
+          {/* Ruta protegida */}
+          <Route path="/home/*" element={<ProtectedRoute element={<Home />} />} />  {/* Ruta para home */}
+
+          {/* Ruta por defecto para manejar el 404 */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </AuthProvider>

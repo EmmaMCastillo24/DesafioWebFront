@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext.jsx';  // Importa el contexto de autenticación
-import LoginForm from '../components/LoginForm.jsx';  // Importa el formulario de login
+import { AuthContext } from '../context/AuthContext.jsx'; 
+import LoginForm from '../components/LoginForm.jsx'; 
+import { Box, Paper } from '@mui/material'; // Importar Material-UI para diseño
 
 const Login = () => {
-  const { login } = useContext(AuthContext);  // Accedemos a la función de login del contexto
+  const { login } = useContext(AuthContext);  
   const navigate = useNavigate(); 
-  // Definimos el esquema de validación
+
   const schema = yup.object().shape({
     correoElectronico: yup
       .string()
@@ -27,15 +28,12 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:4000/api/login', {
         correoElectronico: data.correoElectronico,
-        contrasena: data.password,
+        contrasena: data.password
       });
-
-      console.log('Respuesta de la API:', response.data);
-
-      // Si la autenticación es exitosa, actualizamos el contexto
       const token = response.data.token; 
       const role = response.data.role; 
-      login(token,role);
+      const usuario = response.data.usuario;
+      login(token, role, usuario);
       navigate('/home');
     } catch (error) {
       console.error('Error al hacer la petición:', error);
@@ -48,13 +46,20 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <LoginForm 
-        onSubmit={handleSubmit(onSubmit)} 
-        register={register} 
-        errors={errors} 
-      />
-    </div>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="#f5f5f5"
+    >
+
+        <LoginForm 
+          onSubmit={handleSubmit(onSubmit)} 
+          register={register} 
+          errors={errors} 
+        />
+    </Box>
   );
 };
 

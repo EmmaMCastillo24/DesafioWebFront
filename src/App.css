@@ -1,12 +1,19 @@
+/* styles.css */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .card {
-  padding: 2em;
+  padding: 2rem;
+  margin: 1rem auto;
+  max-width: 600px; /* Para limitar el tamaño de las tarjetas */
+  width: 90%; /* Ajusta el ancho de las tarjetas */
 }
 
 .read-the-docs {
