@@ -259,7 +259,8 @@ const TarjetaOrden = () => {
                       <Typography variant="body1" fontWeight="bold">Cantidad</Typography>
                       </TableCell>
                       <TableCell>
-                      <Typography variant="body1" fontWeight="bold">Subtotal</Typography>                      </TableCell>
+                      <Typography variant="body1" fontWeight="bold">Subtotal</Typography>                      
+                      </TableCell>
                       <TableCell>
                       <Typography variant="body1" fontWeight="bold">Acciones</Typography>
                       </TableCell>

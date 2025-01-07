@@ -30,7 +30,7 @@ const Home = () => {
       </Box>
       {role === 2 ? ( // Manejar el rol como número
         <ClienteHome /> // Contenido específico para clientes
-      ) : role === 1 ? (
+      ) : role === 3 ? (
         <OperadorHome /> // Contenido específico para empleados
       ) : (
         <Typography variant="h6">Rol no definido...</Typography> // Si no está definido el rol

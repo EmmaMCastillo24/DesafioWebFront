@@ -33,6 +33,7 @@ const Login = () => {
       const token = response.data.token; 
       const role = response.data.role; 
       const usuario = response.data.usuario;
+      console.log(role);
       login(token, role, usuario);
       navigate('/home');
     } catch (error) {
